@@ -1,22 +1,41 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Mail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class SendEmailController extends Controller
 {
-    public function sendEmail()
+    /**
+     * Return the view for email
+     */
+    function index()
     {
- 
-      Mail::to('receiver-email-id')->send(new NotifyMail());
- 
-      if (Mail::failures()) {
-           return response()->Fail('Sorry! Please try again latter');
-      }else{
-           return response()->success('Great! Successfully send in your mail');
-         }
+     return view('send_email');
+    }
+
+    /**
+     * Control the sending of emails 
+     */
+    function send(Request $request)
+    {
+     $this->validate($request, [
+      'name'     =>  'required',
+      'email'  =>  'required|email',
+      'message' =>  'required'
+     ]);
+
+        $data = array(
+            'name'      =>  $request->name,
+            'message'   =>   $request->message
+        );
+
+    /**
+     * Send email for new registration
+     */
+     Mail::to($request->email)->send(new SendMail($data));
+     return back()->with('success', 'Thanks for contacting us!');
     }
 }
+?>

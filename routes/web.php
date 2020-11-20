@@ -5,8 +5,8 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketStatusController;
 use App\Http\Controllers\TicketUpdateController;
 use App\Http\Controllers\SendEmailController;
-
-
+use Illuminate\Http\Request;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +30,10 @@ Route::get('/ticketstatus', [TicketStatusController::class, 'index']);
 Route::post('/ticketstatus', [TicketStatusController::class, 'store']);
 Route::post('/ticketupdate', [TicketUpdateController::class, 'store']);
 Route::get('/ticketstatus/{id}', [TicketStatusController::class, 'show']);
-// Route::get('/tickets/find/{id}', [TicketController::class, 'find']);
 Route::get('/tickets/{id}', [TicketController::class, 'show']);
-
-
+Route::get('/sendemail', [SendEmailController::class,'index']);
+Route::post('/sendemail/send', [SendEmailController::class, 'send']);
+Route::post('/search', [SearchController::class, 'filter']);
 
 Auth::routes();
 

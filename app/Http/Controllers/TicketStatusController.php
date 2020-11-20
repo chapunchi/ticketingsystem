@@ -10,47 +10,33 @@ use Illuminate\Support\Str;
 class TicketStatusController extends Controller
 {
     public function index(){
-    
-        // $tickets = Ticket::all();
-        // $tickets = Ticket::orderBy('name')->get();
         $tickets = Ticket::where('refno','54DK9SxzEszxMFlLj33iBz2eOcWB7dXyEePkaU3Z')->get();
-        // $tickets = Ticket::latest()->get();
-
     
         return view('ticketstatus.index', [
             'tickets' => $tickets,
             ]);
     }
 
+    /**
+     * Show the status of the generated key
+     */
     public function show($id){
 
-        // $ticket = Ticket::findOrFail($id);
         $ticket = Ticket::where('refno','54DK9SxzEszxMFlLj33iBz2eOcWB7dXyEePkaU3Z')->get();
 
-        error_log($id);
         return view('ticketstatus.show', [ 'ticket' => $ticket]);
     }
 
-    // public function create(){
-    //     return view('tickets.create');
-    // }
-
+    /**
+     * Get ticket status for the customer based on the key generated
+     */
     public function store(){
-        // $ticket=  new Ticket();
-        // $ticket->name = request('name');
-        // $ticket->desc = request('desc');
-        // $ticket->email = request('email');
-        // $ticket->contact = request('contact');
-        // $ticket->comment = "";
-        // $ticket->refno= $reference;
-
-        // $ticket->save();
-        error_log("qwqwq");
-        error_log(request('refno'));
-
         $tickets = Ticket::where('refno',request('refno'))->get();
-        error_log("qwqwq");
-        error_log($tickets[0]->comment);
+
+        if($tickets[0]->comment=="")
+        {
+            $tickets[0]->comment= "-1";
+        }
 
         return redirect('/ticketstatus')->with('comment', $tickets[0]->comment);
     }
